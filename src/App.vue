@@ -6,16 +6,17 @@
  import {generarId } from './helpers'
  import iconoNuevoGasto from './assets/img/nuevo-gasto.svg'
 import Gasto from './components/Gasto.vue';
-
+import Filtro from './components/Filtro.vue';
 
 
  const modal = reactive ({
     mostrar: false,
     animar: false
  })
- const presupuesto = ref(0);
+ const presupuesto = ref(0)
  const disponible = ref(0)
  const gastado = ref(0)
+ const filtro = ref('')
 
   const gasto = reactive({
     nombre: '',
@@ -132,8 +133,11 @@ import Gasto from './components/Gasto.vue';
     <header>
       <h1>Planificador de Gastos</h1>
  
+    
       <div class="contenedor-header contenedor sombra">
    
+
+        
       <Presupuesto
         v-if="presupuesto === 0"
         @definir-presupuesto ="definirPresupuesto"
@@ -152,6 +156,10 @@ import Gasto from './components/Gasto.vue';
 
     <main v-if="presupuesto > 0">
 
+       <Filtro 
+      v-model:filtro="filtro"
+      
+       />
       <div class="listado-gastos contenedor">
           <h2>{{gastos.length > 0 ? 'Gastos' : 'No hay Gastos'  }}</h2>
 
