@@ -1,5 +1,24 @@
 <script setup>
     import imagen from '../assets/img/grafico.jpg'
+    import {formatearCantidad} from '../helpers'
+
+    const props = defineProps({
+        presupuesto: {
+            type: Number,
+            required: true
+        },
+        disponible:{
+            type: Number,
+            required: true
+        },
+        gastado: {
+            type: Number,
+            required: true
+        }
+
+    })
+    
+
 </script>
 
 <template>
@@ -17,17 +36,17 @@
 
             <p>
                 <span>Presupuesto:</span>
-                Q.0
+                {{ formatearCantidad(presupuesto) }}
             </p>
 
             <p>
                 <span>Disponible:</span>
-                Q.0
+                {{formatearCantidad(disponible)}}
             </p>
 
             <p>
                 <span>Gastado:</span>
-                Q.0
+                {{ formatearCantidad(gastado) }}
             </p>
 
         </div>
@@ -35,6 +54,65 @@
     </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
+    .dos-columnas{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .dos-columnas > :first-child  { /** Solo aplica a el primer hijo > que es el boton */
+        margin-bottom: 3rem;
+    }
+
+    @media (min-width: 768px){
+        .dos-columnas{
+            flex-direction: row;
+            gap: 4rem;
+            align-items: center;
+        }
+        .dos-columnas > :first-child  { /** Solo aplica a el primer hijo > que es el boton */
+        margin-bottom: 0;
+    }  
+    }
+
+    .reset-app{
+        background-color: #DB2777;
+        color: var(--blanco);
+        border: none;
+        padding: 1rem;
+        width: 100%;
+        font-weight: 900;
+        text-transform: uppercase;
+        border-radius: 1rem;
+        transition-property: background-color;
+        transition-duration: 300ms;
+
+    }
+    .reset-app:hover{
+        cursor: pointer;
+        background-color: #c11d67;
+    }
+
+
+    .contenedor-presupuesto{
+        width: 100%;
+    }
+    .contenedor-presupuesto p{
+        font-size: 2.4rem;
+        text-align: center;
+        color: var(--gris-oscuro);
+    }
+
+    @media (min-width: 768px){
+        .contenedor-presupuesto p{
+        text-align: left;
+    }
+    }
+    .contenedor-presupuesto span{
+        font-weight: 900;
+        color: var(--azul);
+    }
+
 
 </style>

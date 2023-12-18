@@ -1,13 +1,14 @@
+
 <script setup>
 
 </script>
 
-<template>
+<template> 
     <h2>Filtros</h2>
-
+   
 </template>
 
-<style scoped>
-   
-</style>
 
+<style lang="scss" scoped>
+
+</style>
