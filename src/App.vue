@@ -1,5 +1,5 @@
 <script setup>
-  import {ref, reactive, watch} from 'vue'
+  import {ref, reactive, watch, computed, onMounted} from 'vue'
  import Presupuesto from './components/Presupuesto.vue'
  import ControlPresupuesto from './components/ControlPresupuesto.vue';
  import Modal from './components/Modal.vue';
@@ -30,11 +30,13 @@ import Filtro from './components/Filtro.vue';
   const gastos = ref([])
 
 
-  watch( gastos, () => {
+  watch(gastos, () => {
     const totalGastado = gastos.value.reduce((total, gasto) => gasto.cantidad + total, 0 )
     gastado.value = totalGastado
+    disponible.value = presupuesto.value - totalGastado
 
-    disponible.value = presupuesto.value - gastado.value
+    localStorage.setItem('gastos', JSON.stringify(gastos.value))
+
   }, {
     deep: true
   })
@@ -53,6 +55,23 @@ import Filtro from './components/Filtro.vue';
 //   }, {
 //       deep: true
 //   })
+
+  watch(presupuesto, () => {
+    localStorage.setItem('presupuesto', presupuesto.value)
+  })
+
+  onMounted(() => {
+    const presupuestoStorage = localStorage.getItem('presupuesto')
+    if(presupuestoStorage){
+      presupuesto.value = Number(presupuestoStorage)
+      disponible.value = Number(presupuestoStorage)
+    }
+
+    const gastosStorage = localStorage.getItem('gastos')
+    if(gastosStorage) {
+     gastos.value = JSON.parse(gastosStorage) //JSON.parse transforma de arreglo a un objeto JS
+     }
+  })
 
 
  const definirPresupuesto = (cantidad) => {
@@ -123,6 +142,22 @@ import Filtro from './components/Filtro.vue';
   ocultarModal();
 }
 
+const gastosFiltrados = computed(() => {
+
+  if(filtro.value) {
+    return gastos.value.filter(gasto => gasto.categoria === filtro.value)
+  }
+  return gastos.value
+})
+
+
+const resetApp = () => {
+ if(confirm('¿Deseas reiniciar presupuesto y gastos?')) {
+        gastos.value = []
+        presupuesto.value = 0
+ }
+}
+
 
 </script>
 
@@ -146,9 +181,11 @@ import Filtro from './components/Filtro.vue';
 
       <ControlPresupuesto 
         v-else
+        @reset-app = 'resetApp'
         :presupuesto = "presupuesto"
         :disponible="disponible"
         :gastado="gastado"
+
       />
 
     </div>
@@ -161,10 +198,10 @@ import Filtro from './components/Filtro.vue';
       
        />
       <div class="listado-gastos contenedor">
-          <h2>{{gastos.length > 0 ? 'Gastos' : 'No hay Gastos'  }}</h2>
+          <h2>{{gastosFiltrados.length > 0 ? 'Gastos' : 'No hay Gastos'  }}</h2>
 
           <Gasto
-           v-for="gasto in gastos"
+           v-for="gasto in gastosFiltrados"
            :key="gasto.id"
            :gasto="gasto"
            @seleccionar-gasto="seleccionarGasto"

@@ -141,7 +141,7 @@
                 >
                     <option value="">--Seleccione</option>
                     <option value="ahorro">Ahorro</option>
-                    <option value="ahorro">Comida</option>
+                    <option value="comida">Comida</option>
                     <option value="casa">Casa</option>
                     <option value="gastos">Gastos varios</option>
                     <option value="ocio">Ocio</option>
